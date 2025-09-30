@@ -22,7 +22,7 @@ body {
     display: flex;
     padding: 10px;
     min-height: 5vh;
-    border: 1px solid #91DFFC;
+    border: 1px solid #ffb65b;
     
 }
 
@@ -32,16 +32,16 @@ body {
     display: flex;
     flex-direction: row; /* Alinea la barra lateral a la izquierda y el contenido a la derecha */
     min-height: 100vh;
-    border: 1px solid #91DFFC;
+    border: 1px solid #ffb65b;
     
 }
 
 /* Barra lateral */
 .sidebar {
     width: 350px;
-    background-color: #faf8f8;
+    background-color: #b9d489;
     padding: 15px;
-    border: 1px solid #91DFFC;
+    border: 1px solid #ffb65b;
     
 }
 
