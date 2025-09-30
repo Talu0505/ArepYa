@@ -77,3 +77,11 @@ body {
     background-color: #7cb11f;
     color: white;
 }
+.btn-green:hover {
+    background-color: #c3e981;
+    color: white;
+}
+
+.no-center {
+    justify-content: flex-start;
+}
