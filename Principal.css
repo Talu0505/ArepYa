@@ -66,6 +66,22 @@ body {
     }
 }
 .img-body{
-    height: 366px;
-    width: 684px;
+    height: 366;
+    /* width: 684px; */
+}
+.text-orange {
+    color: #e68817;
+}
+
+.btn-green {
+    background-color: #7cb11f;
+    color: white;
+}
+.btn-green:hover {
+    background-color: #c3e981;
+    color: white;
+}
+
+.no-center {
+    justify-content: flex-start;
 }
