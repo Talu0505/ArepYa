@@ -115,7 +115,7 @@
                 </tbody>
             </table>
             </table> <!--edicion datos-->
-            <div id="formulario-edicion" style="display:none; margin-top: 20px;">
+            <div id="formulario-edicion" style="display:none; margin-top: 20px;" class="form-container form">
                 <h3>Editar Cliente</h3>
                 <form id="formEditar" onsubmit="guardarEdicion(event)">
                     <input type="hidden" id="editar-id">
@@ -140,8 +140,10 @@
                         <option value="otro">Otro</option>
                     </select><br>
 
-                    <button type="submit">Guardar Cambios</button>
-                    <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+                    <div class="flex flex-row">
+                        <button type="submit">Guardar Cambios</button>
+                        <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+                    </div>
                 </form>
             </div>
         </nav>
@@ -247,13 +249,13 @@
             }
 
             function recargarTabla(data) {
-                 const tbody = document.getElementById("tabla-body");
-                        tbody.innerHTML = ""; // Limpiar tabla 
-                        // clientes = data;
-                        console.log('DATA CLIENTES: ', clientes);
-                        data.forEach(cliente => {
-                            const fila = document.createElement("tr");
-                            fila.innerHTML = `
+                const tbody = document.getElementById("tabla-body");
+                tbody.innerHTML = ""; // Limpiar tabla 
+                // clientes = data;
+                console.log('DATA CLIENTES: ', clientes);
+                data.forEach(cliente => {
+                    const fila = document.createElement("tr");
+                    fila.innerHTML = `
                             <td>${cliente.id}</td>
                             <td>${cliente.nombre}</td>
                             <td>${cliente.correo}</td>
@@ -265,8 +267,8 @@
                             <button onclick="eliminarCliente(${cliente.id})">Eliminar</button>
                             </td>
                         `;
-                            tbody.appendChild(fila);
-                        });
+                    tbody.appendChild(fila);
+                });
             }
 
         </script>

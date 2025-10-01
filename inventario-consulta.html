@@ -119,10 +119,43 @@
                 <!-- filas desde la base de datos -->
             </table>
             </form>
+            <div id="formulario-edicion" style="display:none; margin-top: 20px;" class="form-container form">
+                <h3>Editar Inventario</h3>
+                <form id="formEditar" onsubmit="guardarEdicion(event)">
+                    <input type="hidden" id="editar-id">
+
+                    <label>Codigo producto:</label>
+                    <input type="number" id="codigo_producto" name="producto_id" readonly><br>
+
+                    <label>Nombre producto:</label>
+                    <select id="nombre_producto" name="nombre_producto" onchange="rellenarCodigo()">
+                        <option value="">Seleccione un producto</option>
+                    </select><br>
+
+                    <label>Cantidad:</label>
+                    <input type="number" name="cantidad" id="cantidad" required><br>
+
+                    <label>Fecha elaboracion:</label>
+                    <input type="date" name="fecha_elaboracion" id="fecha_elaboracion" required><br>
+
+                    <label>Fecha vencimiento:</label>
+                    <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" required><br>
+
+                    <label>Numero de Lote:</label>
+                    <input type="number" name="lote" id="lote" required><br>
+
+                    <div class="flex flex-row">
+                        <button type="submit">Guardar Cambios</button>
+                        <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
     </div>
     </nav>
     <script>
         // Cargar los datos automáticamente al cargar la página
+        let selectedInvId = null;
+        const productos = [];
         let listaInventario = [];
         window.onload = function () {
             fetch('inventario_consulta.php')
@@ -132,13 +165,15 @@
                     mostrarInventario(data)
                 })
                 .catch(error => console.error('Error al obtener inventario:', error));
+
         };
 
         // Funcion que crea las filas de la tabla y las agrega al cuerpo de la tabla html
         function mostrarInventario(data) {
+            console.log('data', data);
             const tablaBody = document.getElementById('tabla-body');
             tablaBody.innerHTML = ''; // Limpiar tabla actual
-
+            //product_id, nombre, cantidad, fecha_elaboracion, fecha_vencimiento
             data.forEach(item => {
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
@@ -149,7 +184,7 @@
                         <td>${item.cantidad}</td>
                         <td>${item.lote}</td>
                         <td>
-                            <button onclick="editarFila(this)">Editar</button>
+                            <button onclick="mostrarFormularioEdicion(${item.id}, ${item.producto_id},'${item.nombre}',${item.cantidad},'${item.fecha_elaboracion}','${item.fecha_vencimiento}', ${item.lote})">Editar</button>
                             <button onclick="eliminarInventario(${item.id})">Eliminar</button>
                         </td>
                     `;
@@ -180,11 +215,81 @@
 
         function filtrarTabla() {
             let valorFiltro = document.getElementById('buscar-input').value;
-            let listaFiltrada = this.listaInventario.filter(item => { 
+            let listaFiltrada = this.listaInventario.filter(item => {
                 let nombrePresentacion = item.nombre + ' ' + item.presentacion;
-                return nombrePresentacion.includes(valorFiltro) 
+                return nombrePresentacion.includes(valorFiltro)
             });
             this.mostrarInventario(listaFiltrada);
+        }
+
+        function mostrarFormularioEdicion(id, product_id, nombre, cantidad, fecha_elaboracion, fecha_vencimiento, lote) {
+            selectedInvId = id;
+            selectedProdId = product_id;
+            console.log('Selected ID', selectedInvId);
+            document.getElementById("formulario-edicion").style.display = "block";
+            // Cargar productos al iniciar
+            fetch('obtener_productos.php')
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById('nombre_producto');
+                    data.forEach(producto => {
+                        productos.push(producto); // Guardar en memoria
+                        const option = document.createElement('option');
+                        option.value = producto.nombre;
+                        option.textContent = `${producto.nombre} - ${producto.presentacion}`;
+                        select.appendChild(option);
+                    });
+                });
+                
+            document.getElementById("codigo_producto").value = product_id;
+            document.getElementById("nombre_producto").value = nombre;
+            document.getElementById("cantidad").value = cantidad;
+            document.getElementById("fecha_elaboracion").value = fecha_elaboracion;
+            document.getElementById("fecha_vencimiento").value = fecha_vencimiento;
+            document.getElementById("lote").value = lote;
+        }
+
+        function rellenarCodigo() {
+            const nombreSeleccionado = document.getElementById('nombre_producto').value;
+            const encontrado = productos.find(p => p.nombre === nombreSeleccionado);
+            if (encontrado) {
+                document.getElementById('codigo_producto').value = encontrado.ID_Producto;
+            } else {
+                document.getElementById('codigo_producto').value = "";
+            }
+        }
+        function cancelarEdicion() {
+            document.getElementById("formulario-edicion").style.display = "none";
+        }
+        function guardarEdicion(event) {
+            event.preventDefault();
+            const codigo_producto = document.getElementById("codigo_producto").value;
+            const nombre_producto = document.getElementById("nombre_producto").value;
+            const cantidad = document.getElementById("cantidad").value;
+            const fecha_elaboracion = document.getElementById("fecha_elaboracion").value;
+            const fecha_vencimiento = document.getElementById("fecha_vencimiento").value;
+            const lote = document.getElementById("lote").value;
+            console.log('fecha e', fecha_elaboracion);
+            console.log('fecha v', fecha_vencimiento);
+
+            fetch('editar_inventario.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id=${selectedInvId}
+                &producto_id=${selectedProdId}
+                &cantidad=${encodeURIComponent(cantidad)}
+                &fecha_elaboracion=${fecha_elaboracion}
+                &fecha_vencimiento=${fecha_vencimiento}
+                &lote=${lote}`
+            })
+                .then(response => response.text())
+                .then(data => {
+                    alert(data);
+                    location.reload(); // recargar datos
+                })
+                .catch(error => console.error('Error:', error));
         }
 
     </script>
