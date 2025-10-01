@@ -180,7 +180,10 @@
 
         function filtrarTabla() {
             let valorFiltro = document.getElementById('buscar-input').value;
-            let listaFiltrada = this.listaInventario.filter(item => item.nombre.includes(valorFiltro));
+            let listaFiltrada = this.listaInventario.filter(item => { 
+                let nombrePresentacion = item.nombre + ' ' + item.presentacion;
+                return nombrePresentacion.includes(valorFiltro) 
+            });
             this.mostrarInventario(listaFiltrada);
         }
 
