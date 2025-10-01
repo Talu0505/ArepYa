@@ -1,0 +1,22 @@
+.buscador-select {
+  position: relative;
+  width: auto;
+}
+
+#filtroInput {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  box-sizing: border-box; /* Para incluir padding en el ancho */
+}
+
+#miSelect {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* Estilos adicionales para ocultar/mostrar opciones */
+.hidden {
+  display: none;
+}
