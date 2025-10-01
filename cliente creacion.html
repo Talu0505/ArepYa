@@ -78,6 +78,9 @@
             <nav class="main-content"><!--Visualizacion principal-->
                 <div class="formcontacto"><!--Script formulario ingresar datos de los clientes-->
                     <script>
+                        window.onload = function () {
+                            toggleRegistro();
+                        }
                         function registrarCliente(event) {
                             event.preventDefault();
                     
