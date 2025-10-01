@@ -2,7 +2,7 @@
 session_start();
 
 // Conexión a la base de datos
-$conexion = new mysqli("localhost", "root", "", "prolac");
+$conexion = new mysqli("localhost", "root", "", "arepya");
 if ($conexion->connect_error) {
     die("Error de conexión: " . $conexion->connect_error);
 }
