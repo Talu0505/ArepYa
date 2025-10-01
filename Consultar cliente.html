@@ -94,7 +94,7 @@
             <img src="imagenes/logo-arepya.png" alt="" class="img-body">
             <div class="tabla-controles">
                 <input type="text" id="buscar-input" placeholder="Buscar por nombre, correo, etc.">
-                <button onclick="filtrarTabla()">Filtrar</button>
+                <button onclick="filtrarTabla(event)">Filtrar</button>
                 <button onclick="exportarTabla()">Exportar</button>
             </div>
             <!-- Tabla de datos clientes desde base de datos-->
@@ -147,6 +147,7 @@
         </nav>
 
         <script>
+            let clientes = [];
             // mostrar clientes
             window.onload = function () {
                 fetch('consultar_cliente.php')
@@ -154,7 +155,8 @@
                     .then(data => {
                         const tbody = document.getElementById("tabla-body");
                         tbody.innerHTML = ""; // Limpiar tabla 
-
+                        clientes = data;
+                        console.log('DATA CLIENTES: ', clientes);
                         data.forEach(cliente => {
                             const fila = document.createElement("tr");
                             fila.innerHTML = `
@@ -234,6 +236,39 @@
                     })
                     .catch(error => console.error('Error:', error));
             }
+
+            function filtrarTabla(event) {
+                let nombreFiltrar = document.getElementById('buscar-input').value;
+                console.log('Filtrar valor', nombreFiltrar);
+                console.log('Clientes', clientes);
+                let filtrado = clientes.filter(cliente => cliente.nombre.toLowerCase().includes(nombreFiltrar.toLowerCase()));
+                console.log('Filtrado:', filtrado);
+                recargarTabla(filtrado);
+            }
+
+            function recargarTabla(data) {
+                 const tbody = document.getElementById("tabla-body");
+                        tbody.innerHTML = ""; // Limpiar tabla 
+                        // clientes = data;
+                        console.log('DATA CLIENTES: ', clientes);
+                        data.forEach(cliente => {
+                            const fila = document.createElement("tr");
+                            fila.innerHTML = `
+                            <td>${cliente.id}</td>
+                            <td>${cliente.nombre}</td>
+                            <td>${cliente.correo}</td>
+                            <td>${cliente.telefono}</td>
+                            <td>${cliente.edad}</td>
+                            <td>${cliente.genero}</td>
+                            <td>
+                            <button onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')">Editar</button>
+                            <button onclick="eliminarCliente(${cliente.id})">Eliminar</button>
+                            </td>
+                        `;
+                            tbody.appendChild(fila);
+                        });
+            }
+
         </script>
 
 
