@@ -125,6 +125,48 @@
 
                 </tbody>
             </table>
+            <div id="formulario-edicion" style="display:none; margin-top: 20px; overflow:auto; max-height: 80%;"
+                class="form-container form">
+                <h3>Editar Usuario</h3>
+                <form id="formEditar" onsubmit="guardarEdicion(event)">
+                    <input type="hidden" id="editar-id">
+
+                    <label>Nombre:</label>
+                    <input type="text" name="nombre" id="nombre" required><br>
+
+                    <label>Direccion:</label>
+                    <input type="text" name="direccion" id="direccion" required><br>
+
+                    <label>Tipo de identificación:</label>
+                    <input type="text" name="tipoid" id="tipoid" required><br>
+
+                    <label>Número de documento:</label>
+                    <input type="number" name="numerodocumento" id="numerodocumento" required><br>
+
+                    <label>Celular:</label>
+                    <input type="number" name="celular" id="celular" required><br>
+
+                    <label>Correo:</label>
+                    <input type="email" name="correo" id="correo" required><br>
+
+                    <label>Nombre de usuario:</label>
+                    <input type="text" name="nombreusuario" id="nombreusuario" required><br>
+
+                    <label>Fecha ingreso:</label>
+                    <input type="date" name="fechaingreso" id="fechaingreso" required><br>
+
+                    <label>Contraseña:</label>
+                    <input type="text" name="contraseña" id="contraseña" required><br>
+
+                    <label>Rol:</label>
+                    <input type="text" name="rol" id="rol" required><br>
+
+                    <div class="flex flex-row">
+                        <button type="submit">Guardar Cambios</button>
+                        <button type="button" onclick="cancelarEdicion()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
             <script>
                 // mostrar usuarios desde base de datos
                 let listaUsuarios = [];
@@ -181,12 +223,72 @@
                                         <td>${usuarios.fechaingreso}</td>
                                         <td>${usuarios.rol}</td>
                                         <td>
-                                        <button onclick="editarFila(this)">Editar</button>
+                                        <button onclick='mostrarFormularioEdicion(${JSON.stringify(usuarios)})'>Editar</button>
                                         <button onclick="eliminarUsuario(${usuarios.id})">Eliminar</button>
                                         </td>
                                     `;
                         tbody.appendChild(fila);
                     });
+                }
+                function mostrarFormularioEdicion(usuario) {
+                    console.log('Usuario: ', usuario.numerodocumento);
+                    // return;
+                    // selectedInvId = id;
+                    // selectedProdId = product_id;
+                    // console.log('Selected ID', selectedInvId);
+                    document.getElementById("formulario-edicion").style.display = "block";
+
+                    document.getElementById("editar-id").value = usuario.id;
+                    document.getElementById("nombre").value = usuario.nombre;
+                    document.getElementById("direccion").value = usuario.direccion;
+                    document.getElementById("numerodocumento").value = usuario.numerodocumento;
+                    document.getElementById("tipoid").value = usuario.tipoid;
+                    document.getElementById("celular").value = usuario.celular;
+                    document.getElementById("correo").value = usuario.correo;
+                    document.getElementById("contraseña").value = usuario.contraseña;
+                    document.getElementById("nombreusuario").value = usuario.nombreusuario;
+                    document.getElementById("fechaingreso").value = usuario.fechaingreso;
+                    document.getElementById("rol").value = usuario.rol;
+                }
+                function cancelarEdicion() {
+                    document.getElementById("formulario-edicion").style.display = "none";
+                }
+
+                function guardarEdicion(event) {
+                    event.preventDefault();
+                    const id = document.getElementById("editar-id").value;
+                    const nombre = document.getElementById("nombre").value;
+                    const direccion = document.getElementById("direccion").value;
+                    const numerodocumento = document.getElementById("numerodocumento").value;
+                    const tipoid = document.getElementById("tipoid").value;
+                    const celular = document.getElementById("celular").value;
+                    const contraseña = document.getElementById("contraseña").value;
+                    const nombreusuario = document.getElementById("nombreusuario").value;
+                    const fechaingreso = document.getElementById("fechaingreso").value;
+                    const rol = document.getElementById("rol").value;
+
+                    fetch('editar_usuario.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `id=${id}
+                &nombre=${nombre}
+                &direccion=${direccion}
+                &numerodocumento=${numerodocumento}
+                &tipoid=${tipoid}
+                &celular=${encodeURIComponent(celular)}
+                &contraseña=${contraseña}
+                &nombreusuario=${nombreusuario}
+                &fechaingreso=${fechaingreso}
+                &rol=${rol}`
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+                            alert(data);
+                            location.reload(); // recargar datos
+                        })
+                        .catch(error => console.error('Error:', error));
                 }
             </script>
     </div>
