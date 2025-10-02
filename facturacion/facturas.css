@@ -10,7 +10,7 @@
   box-sizing: border-box; /* Para incluir padding en el ancho */
 }
 
-#miSelect {
+#cliente {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
