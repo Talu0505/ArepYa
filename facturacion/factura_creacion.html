@@ -106,7 +106,7 @@
             </div> -->
 
 
-            <form onsubmit="agregarProducto(event)">
+            <form onsubmit="agregarProducto(event)" id="formRegistro">
                 <table>
                     <tr>
                         <th>Cliente</th>
@@ -155,7 +155,7 @@
                 <tbody id="body_tabla"></tbody>
 
             </table>
-            <button class="btn btn-green my-2" onclick="generarFactura()">Generar Factura</button>
+            <button class="btn btn-green my-2" onclick="generarFactura()" id="btnGenerar">Generar Factura</button>
             <img src="../imagenes/logo-arepya.png" alt="Logo" class="img-body">
     </div>
     </nav>
@@ -214,14 +214,39 @@
                 body: `id_cliente=${encodeURIComponent(idCliente)}&total=${encodeURIComponent(total)}&fecha=${encodeURIComponent(fecha)}`
             })
                 .then(response => response.text())
-                .then(data => {
-                    console.log('Respuesta: ', data);
+                .then(idFactura => {
+                    console.log('Respuesta: ', idFactura);
                     // alert(data);
-                    // document.getElementById("formRegistro").reset();
+                    guardarProductosFactura(idFactura);
+                    alert('Factura guardada correctamente!')
+                    document.getElementById("formRegistro").reset();
+                    listaFactura.splice(0, listaFactura.length);
+                    mostrarListaTablaResumen(listaFactura);
                 })
                 .catch(error => {
                     console.error('Error:', error);
                 });
+        }
+
+        function guardarProductosFactura(idFactura) {
+            listaFactura.forEach(elemento => {
+                console.log('Mandando a guardar producto', elemento);
+
+                fetch('crear_productos_factura.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `id_factura=${encodeURIComponent(idFactura)}&id_producto=${encodeURIComponent(elemento.idProducto)}
+                    &cantidad=${encodeURIComponent(elemento.cantidad)}&precio=${encodeURIComponent(elemento.precioTotal)}`
+                })
+                    .then(response => response.text())
+                    .then(respuesta => {
+                        console.log('Guardado: ', respuesta);
+                    }).catch(error => {
+                        console.log(error);
+                    });
+            });
         }
 
         function agregarProducto(event) {
@@ -317,16 +342,6 @@
                 });
         }
 
-        // Rellenar código cuando seleccionan un producto
-        function rellenarCodigo() {
-            const nombreSeleccionado = document.getElementById('nombre_producto').value;
-            const encontrado = productos.find(p => p.nombre === nombreSeleccionado);
-            if (encontrado) {
-                document.getElementById('codigo_producto').value = encontrado.ID_Producto;
-            } else {
-                document.getElementById('codigo_producto').value = "";
-            }
-        }
     </script>
 </body>
 
