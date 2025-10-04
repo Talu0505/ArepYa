@@ -11,7 +11,6 @@ $sql = "INSERT INTO factura (id_cliente, total, fecha)
 $result_save = $conexion->query($sql);
 if ($result_save) {
     echo json_encode($conexion->insert_id);
-    // echo "Cliente registrado con éxito";
 } else {
     echo "Error: " . $conexion->error;
 }
