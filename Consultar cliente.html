@@ -94,7 +94,7 @@
             <img src="imagenes/logo-arepya.png" alt="" class="img-body">
             <div class="tabla-controles">
                 <input type="text" id="buscar-input" placeholder="Buscar por nombre, correo, etc.">
-                <button onclick="filtrarTabla(event)">Filtrar</button>
+                <button onclick="filtrarTabla(event)" name="btnFiltrar">Filtrar</button>
                 <button onclick="exportarTabla()">Exportar</button>
             </div>
             <!-- Tabla de datos clientes desde base de datos-->
@@ -169,8 +169,8 @@
                             <td>${cliente.edad}</td>
                             <td>${cliente.genero}</td>
                             <td>
-                            <button onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')">Editar</button>
-                            <button onclick="eliminarCliente(${cliente.id})">Eliminar</button>
+                            <button name='btnEditar' onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')">Editar</button>
+                            <button name='btnEliminar' onclick="eliminarCliente(${cliente.id})">Eliminar</button>
                             </td>
                         `;
                             tbody.appendChild(fila);
