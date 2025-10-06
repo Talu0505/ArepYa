@@ -27,10 +27,10 @@
     <nav class="navbar navbar-light bg-light navbar-expand"><!--Barra de navegacion con iconos-->
         <div class="container-fluid">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="pagina principal.html"><i
+                <li class="nav-item"><a class="nav-link" href="../pagina principal.html"><i
                             class="fa-solid fa-house"></i></a></li>
                 <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-circle-user"></i></a></li>
-                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa-solid fa-user-xmark"></i></a>
+                <li class="nav-item"><a class="nav-link" href="../index.html"><i class="fa-solid fa-user-xmark"></i></a>
                 </li>
             </ul>
         </div>
@@ -53,7 +53,7 @@
                 <li><!--modulo de Inventario-->
                     <a class="text-orange text-decoration-none" data-bs-toggle="collapse"
                         href="#inventarioMenu"><b>Inventario</b></a>
-                    <ul class="list-unstyled ps-3 menu-expandible" id="inventarioMenu">
+                    <ul class="collapse list-unstyled ps-3 menu-expandible" id="inventarioMenu">
                         <li><a href="../Crear_Producto.html" class="text-dark text-decoration-none">Crear Producto</a>
                         </li>
                         <li><a href="../ingresar-productos.html" class="text-dark text-decoration-none">Ingresar
@@ -65,12 +65,12 @@
                 <li><!--modulo de Facturacion-->
                     <a class="text-orange text-decoration-none" data-bs-toggle="collapse"
                         href="#facturaMenu"><b>Facturacion</b></a>
-                    <ul class="collapse list-unstyled ps-3" id="facturaMenu">
+                    <ul class="list-unstyled ps-3" id="facturaMenu">
                         <li><a href="factura_creacion.html" class="text-dark text-decoration-none">Crear Factura</a>
                         </li>
-                        <li><a href="../factura_consulta.html" class="text-dark text-decoration-none">Consultar
+                        <li><a href="factura_consulta.html" class="text-dark text-decoration-none">Consultar
                                 Factura</a></li>
-                        <li><a href="../factura_ventas" class="text-dark text-decoration-none">Datos de ventas</a></li>
+                        <li><a href="factura_ventas" class="text-dark text-decoration-none">Datos de ventas</a></li>
                     </ul>
                 </li>
                 <li><!--modulo de Usuaios-->
@@ -144,7 +144,7 @@
             <table id="tabla_resumen" style="max-width: 80%;">
                 <thead>
                     <tr>
-                        <th>Cliente</th>
+                        <!-- <th>Cliente</th> -->
                         <th>Produto</th>
                         <th>Precio unidad</th>
                         <th>Cantidad</th>
@@ -155,6 +155,43 @@
                 <tbody id="body_tabla"></tbody>
 
             </table>
+            <div id="resumenVenta" class="form-container" style="max-height: 80%; overflow: auto;">
+                <div>
+                    <h2>Factura de venta</h2>
+                </div>
+                <div class="text-start">
+                    <span>Factura No.: </span>
+                    <span id="numFactura">
+                    </span>
+                </div>
+                <div class="text-start">
+                    <span>Cliente: </span>
+                    <span id="labelNombreCliente"></span>
+                </div>
+                <div class="text-start">
+                    <span>CC: </span>
+                    <span id="labelCedulaCliente"></span>
+                </div>
+                <form>
+                    <table id="tablaResumenVenta">
+                        <thead>
+                            <th>Producto</th>
+                            <th>Precio unidad</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </thead>
+                        <tbody id="bodyTablaResumenVenta">
+                        </tbody>
+                        <tr>
+                    </table>
+                </form>
+                <div>
+                    <span>Total a pagar: </span><span id="totalAPagar"></span>
+                </div>
+                <div>
+                    <button id="btnCerrarResumen" onclick="cerrarResumen()">Cerrar</button>
+                </div>
+            </div>
             <button class="btn btn-green my-2" onclick="generarFactura()" id="btnGenerar">Generar Factura</button>
             <img src="../imagenes/logo-arepya.png" alt="Logo" class="img-body">
     </div>
@@ -183,13 +220,21 @@
                 }
             });
         });
+        let cliente = {};
         const productos = [];
-        const listaFactura = []
+        const listaFactura = [];
+
+
 
         // Cargar productos al iniciar
         consultarProductos();
         // Carga clientes al inciiar
         consultarClientes();
+
+        function cerrarResumen() {
+            const modalReusmen = document.getElementById('resumenVenta');
+            modalReusmen.style.display = "none";
+        }
 
         function cambioCliente(evento) {
             console.log('Cambio de cliente: ', evento.target.value);
@@ -215,13 +260,14 @@
             })
                 .then(response => response.text())
                 .then(idFactura => {
+                    mostrarResumen(idFactura);
                     console.log('Respuesta: ', idFactura);
                     // alert(data);
                     guardarProductosFactura(idFactura);
-                    alert('Factura guardada correctamente!')
                     document.getElementById("formRegistro").reset();
                     listaFactura.splice(0, listaFactura.length);
                     mostrarListaTablaResumen(listaFactura);
+                    alert('Factura guardada correctamente!')
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -249,6 +295,29 @@
             });
         }
 
+        function mostrarResumen(numFactura) {
+            let total = 0;
+            document.getElementById('numFactura').innerText = numFactura;
+            document.getElementById('labelNombreCliente').innerText = cliente.nombreCliente.split(' - ')[1];
+            document.getElementById('labelCedulaCliente').innerText = cliente.nombreCliente.split(' - ')[0];
+            let fResumenVenta = document.getElementById('resumenVenta');
+            fResumenVenta.style.display = "block";
+            let tbody = document.getElementById('bodyTablaResumenVenta');
+            tbody.innerHTML = '';
+            listaFactura.forEach((elemento) => {
+                let nuevaFila = document.createElement('tr');
+                nuevaFila.innerHTML = `
+                        <th>${elemento.nombreProducto}</th>
+                        <td>$ ${new Intl.NumberFormat().format(elemento.precioUnidad)}</td>
+                        <td>${elemento.cantidad}</td>
+                        <td>$ ${new Intl.NumberFormat().format(elemento.precioTotal)}</td>
+                `;
+                tbody.appendChild(nuevaFila);
+                total += elemento.precioTotal
+            });
+            document.getElementById('totalAPagar').innerText = `$ ${new Intl.NumberFormat().format(total)}`;
+        }
+
         function agregarProducto(event) {
             event.preventDefault(); // Esta linea es necesaria para que no se recargue la pagina con el metodo submmit del formulario
             // Obtención de los datos del formulario
@@ -257,6 +326,7 @@
             const idProducto = document.getElementById('producto').value
             const nombreProducto = document.getElementById('producto').selectedOptions[0].text;
             const cantidad = document.getElementById('cantidad').value;
+            cliente = { idCliente, nombreCliente };
 
             // Inicialmente se busca si el producto que se va a agregar ya existe dentro del listado
             const prodIndex = listaFactura.findIndex(elemento => elemento.idProducto == idProducto);
@@ -295,11 +365,10 @@
             listaFactura.forEach(elemento => {
                 const fila = document.createElement('tr');
                 fila.innerHTML = `
-                            <td>${elemento.nombreCliente}</td>
                             <td>${elemento.nombreProducto}</td>
-                            <td>${elemento.precioUnidad}</td>
+                            <td>$ ${new Intl.NumberFormat().format(elemento.precioUnidad)}</td>
                             <td>${elemento.cantidad}</td>
-                            <td>${elemento.precioUnidad * elemento.cantidad}</td>
+                            <td>$ ${new Intl.NumberFormat().format(elemento.precioUnidad * elemento.cantidad)}</td>
                             <td><button class="btn btn-danger" onclick="eliminarProducto(${elemento.idProducto})">Eliminar</button></td>`
                 tbody.appendChild(fila);
             })
