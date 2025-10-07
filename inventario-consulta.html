@@ -184,8 +184,8 @@
                         <td>${item.cantidad}</td>
                         <td>${item.lote}</td>
                         <td>
-                            <button onclick="mostrarFormularioEdicion(${item.id}, ${item.producto_id},'${item.nombre}',${item.cantidad},'${item.fecha_elaboracion}','${item.fecha_vencimiento}', ${item.lote})">Editar</button>
-                            <button onclick="eliminarInventario(${item.id})">Eliminar</button>
+                            <button onclick="mostrarFormularioEdicion(${item.id}, ${item.producto_id},'${item.nombre}',${item.cantidad},'${item.fecha_elaboracion}','${item.fecha_vencimiento}', ${item.lote})" class="btn btn-green">Editar</button>
+                            <button onclick="eliminarInventario(${item.id})" class="btn btn-danger">Eliminar</button>
                         </td>
                     `;
                 tablaBody.appendChild(fila);

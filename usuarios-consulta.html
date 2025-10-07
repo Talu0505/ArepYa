@@ -223,8 +223,8 @@
                                         <td>${usuarios.fechaingreso}</td>
                                         <td>${usuarios.rol}</td>
                                         <td>
-                                        <button onclick='mostrarFormularioEdicion(${JSON.stringify(usuarios)})'>Editar</button>
-                                        <button onclick="eliminarUsuario(${usuarios.id})">Eliminar</button>
+                                        <button onclick='mostrarFormularioEdicion(${JSON.stringify(usuarios)})' class="btn btn-green m-1">Editar</button>
+                                        <button onclick="eliminarUsuario(${usuarios.id})" class="btn btn-danger">Eliminar</button>
                                         </td>
                                     `;
                         tbody.appendChild(fila);

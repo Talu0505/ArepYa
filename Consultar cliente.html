@@ -169,8 +169,8 @@
                             <td>${cliente.edad}</td>
                             <td>${cliente.genero}</td>
                             <td>
-                            <button name='btnEditar' onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')">Editar</button>
-                            <button name='btnEliminar' onclick="eliminarCliente(${cliente.id})">Eliminar</button>
+                            <button name='btnEditar' onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')" class="btn btn-green">Editar</button>
+                            <button name='btnEliminar' onclick="eliminarCliente(${cliente.id})" class="btn btn-danger">Eliminar</button>
                             </td>
                         `;
                             tbody.appendChild(fila);
@@ -263,8 +263,8 @@
                             <td>${cliente.edad}</td>
                             <td>${cliente.genero}</td>
                             <td>
-                            <button onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')">Editar</button>
-                            <button onclick="eliminarCliente(${cliente.id})">Eliminar</button>
+                            <button onclick="mostrarFormularioEdicion(${cliente.id}, '${cliente.nombre}', '${cliente.correo}', '${cliente.telefono}', ${cliente.edad}, '${cliente.genero}')" class="btn btn-green">Editar</button>
+                            <button onclick="eliminarCliente(${cliente.id})" class="btn btn-danger">Eliminar</button>
                             </td>
                         `;
                     tbody.appendChild(fila);
