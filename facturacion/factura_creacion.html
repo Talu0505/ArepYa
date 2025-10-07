@@ -144,7 +144,7 @@
             <table id="tabla_resumen" style="max-width: 80%;">
                 <thead>
                     <tr>
-                        <!-- <th>Cliente</th> -->
+                        <th>Cliente</th>
                         <th>Produto</th>
                         <th>Precio unidad</th>
                         <th>Cantidad</th>
@@ -185,11 +185,11 @@
                         <tr>
                     </table>
                 </form>
-                <div>
+                <div class="text-end">
                     <span>Total a pagar: </span><span id="totalAPagar"></span>
                 </div>
                 <div>
-                    <button id="btnCerrarResumen" onclick="cerrarResumen()">Cerrar</button>
+                    <button id="btnCerrarResumen" onclick="cerrarResumen()">Aceptar</button>
                 </div>
             </div>
             <button class="btn btn-green my-2" onclick="generarFactura()" id="btnGenerar">Generar Factura</button>
@@ -203,6 +203,8 @@
             const input = document.getElementById('filtroInput');
             const select = document.getElementById('cliente');
             const options = select.options;
+            document.getElementById('btnGenerar').classList.add('hidden');
+            document.getElementById('tabla_resumen').classList.add('hidden');
 
             // Listener para filtrar los clientes cuando se busca por identificacion o nombre
             input.addEventListener('input', function () {
@@ -267,7 +269,7 @@
                     document.getElementById("formRegistro").reset();
                     listaFactura.splice(0, listaFactura.length);
                     mostrarListaTablaResumen(listaFactura);
-                    alert('Factura guardada correctamente!')
+                    // alert('Factura guardada correctamente!')
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -357,8 +359,10 @@
         function mostrarListaTablaResumen(listaFactura) {
             if (listaFactura.length == 0) {
                 document.getElementById('btnGenerar').classList.add('hidden');
+                document.getElementById('tabla_resumen').classList.add('hidden');
             } else {
                 document.getElementById('btnGenerar').classList.remove('hidden');
+                document.getElementById('tabla_resumen').classList.remove('hidden');
             }
             const tbody = document.getElementById('body_tabla');
             tbody.innerHTML = '';
