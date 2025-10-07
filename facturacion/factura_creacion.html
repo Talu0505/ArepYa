@@ -106,14 +106,14 @@
             </div> -->
 
 
-            <form onsubmit="agregarProducto(event)" id="formRegistro">
+            <form onsubmit="agregarProducto(event)" id="formRegistro" style="min-width: 30rem;" >
                 <table>
                     <tr>
                         <th>Cliente</th>
                         <td>
-                            <div class="buscador-select mx-auto" style="width: 80%;">
-                                <input type="text" id="filtroInput" placeholder="Buscar por nombre o identificación">
-                                <select id="cliente" size="3" onchange="cambioCliente(event)" style="width: 100%;">
+                            <div class="buscador-select mx-auto">
+                                <input type="text" id="filtroInput" placeholder="Buscar por nombre o identificación" class="form-control">
+                                <select id="cliente" size="4" onchange="cambioCliente(event)" class="form-select">
                                 </select>
                             </div>
                             <!-- <select id="cliente" name="cliente" required>
@@ -125,14 +125,14 @@
                         <th>Producto</th>
                         <td>
 
-                            <select id="producto" name="producto" required>
+                            <select id="producto" name="producto" required class="form-select">
                                 <option value="">Seleccione un producto</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th>Cantidad</th>
-                        <td><input type="number" name="cantidad" id="cantidad" required></td>
+                        <td><input type="number" name="cantidad" id="cantidad" required class="form-control"></td>
                     </tr>
                     <td colspan="2" style="text-align: center;">
                         <button class="btn btn-warning">Agregar</button>
@@ -149,7 +149,6 @@
                         <th>Precio unidad</th>
                         <th>Cantidad</th>
                         <th>Precio total</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="body_tabla"></tbody>
